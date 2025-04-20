@@ -95,3 +95,154 @@ GitHub blocks files over **100 MB**, and your `attendance.tar` is ~475 MB. Even 
 | Permission denied (publickey)     | Start SSH agent → Add key → Test with `ssh -T git@github.com`       |
 | Large file (>100MB) blocks push   | Remove file from history using `filter-branch`, then force push     |
 
+
+
+
+Got it — you're saying that **every time you open Git Bash or try Git commands**, you need to run:
+
+```bash
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/saddamnvn
+```
+
+That’s annoying 😅 — let’s **make it automatic**, so your SSH key is **added once** and remembered.
+
+---
+
+## ✅ Solution: Automatically Load SSH Key at Startup (Windows + Git Bash)
+
+### 🧩 Step 1: Add Key to `~/.bash_profile`
+
+1. Open Git Bash.
+2. Run:
+
+```bash
+nano ~/.bash_profile
+```
+
+3. Add the following lines at the end:
+
+```bash
+# Start SSH agent and add key automatically
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/saddamnvn
+```
+
+4. Save the file:
+   - Press `Ctrl + O` to write the file
+   - Press `Enter` to confirm
+   - Press `Ctrl + X` to exit
+
+---
+
+### 🧪 Step 2: Restart Git Bash
+
+Close Git Bash, open it again, and you should see:
+```
+Agent pid XXXX
+Identity added: /c/Users/01957/.ssh/saddamnvn
+```
+
+That means your key is loaded and you won’t have to type `ssh-add` again.
+
+---
+
+### ✅ Bonus (Optional): Use `Windows ssh-agent` instead (No Git Bash needed)
+
+If you want this to work **system-wide (including IntelliJ, VS Code, etc.)**:
+
+1. **Enable the Windows SSH Agent:**
+   ```powershell
+   Start-Service ssh-agent
+   Set-Service -Name ssh-agent -StartupType Automatic
+   ```
+
+2. **Add your key permanently:**
+   ```powershell
+   ssh-add C:\Users\01957\.ssh\saddamnvn
+   ```
+
+   This will remember it between reboots 🎉
+
+---
+
+
+
+
+
+That error usually means the `ssh-agent` service is either **not installed**, **disabled**, or you need **admin privileges** to start it.
+
+Let’s go step-by-step to fix this and get it working system-wide:
+
+---
+
+## 🧰 Fix for: "Cannot start service ssh-agent"
+
+### ✅ Step 1: Open PowerShell **as Administrator**
+
+1. Click `Start`
+2. Type `PowerShell`
+3. Right-click on **Windows PowerShell**
+4. Select **"Run as administrator"**
+
+You'll know it's working if the window title says **Administrator: Windows PowerShell**.
+
+---
+
+### ✅ Step 2: Enable and Start `ssh-agent` Service
+
+Now run these commands **in that admin PowerShell**:
+
+```powershell
+Get-Service ssh-agent
+```
+
+Check its status. If it's **Disabled**, do the following:
+
+```powershell
+Set-Service -Name ssh-agent -StartupType Automatic
+Start-Service ssh-agent
+```
+
+If you get no errors, the service should now be running and auto-started on reboot 🎉
+
+---
+
+### ✅ Step 3: Add Your SSH Key Permanently
+
+Now, run this command (replace path with your actual key if different):
+
+```powershell
+ssh-add C:\Users\01957\.ssh\saddamnvn
+```
+
+It should say something like:
+
+```
+Identity added: C:\Users\01957\.ssh\saddamnvn
+```
+
+This will now **persist across sessions**.
+
+---
+
+## 🧪 Test It
+
+Now close your terminal and try:
+
+```bash
+ssh -T git@github.com
+```
+
+You should see:
+
+```
+Hi Saddam-Hossen! You've successfully authenticated...
+```
+
+✅ No need to re-add your key every time now!
+
+---
+
+
+
