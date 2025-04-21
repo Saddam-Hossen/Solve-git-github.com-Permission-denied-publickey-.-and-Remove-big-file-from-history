@@ -13,13 +13,15 @@ This error usually happens when GitHub can't verify your SSH key. Here's how Abd
 
 1. **Start the SSH Agent**
    ```bash
-   eval $(ssh-agent -s)
+   eval $(ssh-agent -s) / "C:\Program Files\Git\bin\bash.exe" --login -i
+
    ```
    ➤ This starts the background service that handles your SSH keys.
 
 2. **Add your SSH private key**
    ```bash
-   ssh-add ~/.ssh/saddamnvn
+   ssh-add ~/.ssh/saddamnvn /  ssh-add "$HOME\.ssh\saddamnvn"
+
    ```
    ➤ This adds your custom SSH key (`saddamnvn`) to the agent so GitHub can use it.
 
@@ -102,7 +104,8 @@ Got it — you're saying that **every time you open Git Bash or try Git commands
 
 ```bash
 eval $(ssh-agent -s)
-ssh-add ~/.ssh/saddamnvn
+ssh-add ~/.ssh/saddamnvn /  ssh-add "$HOME\.ssh\saddamnvn"
+
 ```
 
 That’s annoying 😅 — let’s **make it automatic**, so your SSH key is **added once** and remembered.
@@ -159,7 +162,8 @@ If you want this to work **system-wide (including IntelliJ, VS Code, etc.)**:
 
 2. **Add your key permanently:**
    ```powershell
-   ssh-add C:\Users\01957\.ssh\saddamnvn
+   ssh-add C:\Users\01957\.ssh\saddamnvn /  ssh-add "$HOME\.ssh\saddamnvn"
+
    ```
 
    This will remember it between reboots 🎉
@@ -213,7 +217,8 @@ If you get no errors, the service should now be running and auto-started on rebo
 Now, run this command (replace path with your actual key if different):
 
 ```powershell
-ssh-add C:\Users\01957\.ssh\saddamnvn
+ssh-add C:\Users\01957\.ssh\saddamnvn /  ssh-add "$HOME\.ssh\saddamnvn"
+
 ```
 
 It should say something like:
