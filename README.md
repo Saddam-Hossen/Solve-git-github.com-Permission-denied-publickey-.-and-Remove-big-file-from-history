@@ -245,9 +245,57 @@ You should see:
 Hi Saddam-Hossen! You've successfully authenticated...
 ```
 
-✅ No need to re-add your key every time now!
+
+Thanks for the update — the issue is almost solved, but Git is still not using your correct SSH key when pulling.
+
+You are authenticated (`ssh -T` worked), but `git pull` is failing — meaning **your SSH key works**, but Git isn't picking it up.
 
 ---
 
+### ✅ Let’s **force Git** to use the correct SSH key with debug output
+
+Please try this:
+
+```powershell
+GIT_SSH_COMMAND="ssh -v" git pull origin main
+```
+
+This will show a **verbose debug log** of the SSH connection and reveal **which key Git is trying to use**.
+
+---
+
+### 🔍 From the verbose log, please look for:
+
+- Lines like:
+  ```
+  Offering public key: C:/Users/YourName/.ssh/id_rsa
+  Offering public key: C:/Users/YourName/.ssh/saddamnvn
+  ```
+- Or:
+  ```
+  Authenticated with partial success.
+  No more authentication methods available.
+  ```
+
+Please copy and paste just the **last 15–20 lines** here (if you're okay with that) — no private info will be exposed.
+
+---
+
+### 🛠️ Alternative Quick Fix (Test)
+
+Try setting the remote using **HTTPS** instead of SSH if you're okay using username/token:
+
+```powershell
+git remote set-url origin https://github.com/Saddam-Hossen/userServiceMicroService.git
+```
+
+Then:
+```powershell
+git pull origin main
+```
+
+It will ask for username/token instead of using SSH.
+
+Let me know what you prefer — we can keep going with SSH or switch to HTTPS.
 
 
